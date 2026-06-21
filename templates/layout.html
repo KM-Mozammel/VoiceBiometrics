@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>
+        {% block title %}Voice Biometrics{% endblock %}
+    </title>
+
+    <link rel="stylesheet" href="{{ url_for('styles', filename='styles.css') }}">
+
+</head>
+
+<body>
+
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+
+    <script>
+        // async function upload() {
+        //     const file1 = document.getElementById('file1').files[0];
+        //     const file2 = document.getElementById('file2').files[0];
+
+        //     const errorDiv = document.getElementById('error');
+        //     const resultDiv = document.getElementById('result');
+
+        //     errorDiv.textContent = "";
+        //     resultDiv.textContent = "";
+
+        //     if (!file1 || !file2) {
+        //         errorDiv.textContent = "⚠️ Please select both audio files!";
+        //         return;
+        //     }
+
+        //     const formData = new FormData();
+        //     formData.append("file1", file1);
+        //     formData.append("file2", file2);
+
+        //     try {
+        //         const response = await fetch("/compare", {
+        //             method: "POST",
+        //             body: formData
+        //         });
+
+        //         const result = await response.json();
+
+        //         if (!response.ok) {
+        //             errorDiv.textContent = result.error || "Server error";
+        //         } else {
+        //             resultDiv.textContent = JSON.stringify(result, null, 2);
+        //         }
+
+        //     } catch (err) {
+        //         errorDiv.textContent = "Network error: " + err.message;
+        //     }
+        // }
+
+        // ----------------------
+        // REGISTER USER
+        // ----------------------
+        async function registerUser() {
+            const username = document.getElementById("regUsername").value;
+            const file = document.getElementById("regFile").files[0];
+
+            const resultDiv = document.getElementById("regResult");
+            resultDiv.textContent = "";
+
+            if (!username || !file) {
+                resultDiv.textContent = "⚠️ Username and voice required";
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("username", username);
+            formData.append("file", file);
+
+            try {
+                const res = await fetch("/register", {
+                    method: "POST",
+                    body: formData
+                });
+
+                const data = await res.json();
+
+                if (!res.ok) {
+                    resultDiv.textContent = "❌ " + data.error;
+                } else {
+                    resultDiv.textContent = "✅ Registered successfully!";
+                }
+
+            } catch (err) {
+                resultDiv.textContent = "Network error: " + err.message;
+            }
+        }
+
+
+        // ----------------------
+        // LOGIN USER
+        // ----------------------
+        async function loginUser() {
+            const username = document.getElementById("loginUsername").value;
+            const file = document.getElementById("loginFile").files[0];
+
+            const resultDiv = document.getElementById("loginResult");
+            resultDiv.textContent = "";
+
+            if (!username || !file) {
+                resultDiv.textContent = "⚠️ Username and voice required";
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("username", username);
+            formData.append("file", file);
+
+            try {
+                const res = await fetch("/login", {
+                    method: "POST",
+                    body: formData
+                });
+
+                const data = await res.json();
+
+                if (!res.ok) {
+                    resultDiv.textContent = "❌ " + data.error;
+                } else {
+                    if (data.authenticated) {
+                        resultDiv.textContent = "🟢 Login SUCCESS (distance: " + data.distance.toFixed(4) + ")";
+                    } else {
+                        resultDiv.textContent = "🔴 Voice NOT MATCHED (distance: " + data.distance.toFixed(4) + ")";
+                    }
+                }
+
+            } catch (err) {
+                resultDiv.textContent = "Network error: " + err.message;
+            }
+        }
+    </script>
+
+</body>
+
+</html>

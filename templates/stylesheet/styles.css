@@ -1,0 +1,30 @@
+.auth-container {
+    max-width: 500px;
+    margin: auto;
+    font-family: Arial;
+}
+
+.box {
+    padding: 15px;
+    border: 1px solid #ddd;
+    margin-bottom: 20px;
+    border-radius: 8px;
+}
+
+input {
+    display: block;
+    margin: 10px 0;
+    width: 100%;
+    padding: 8px;
+}
+
+button {
+    padding: 10px;
+    width: 100%;
+    cursor: pointer;
+}
+
+#regResult, #loginResult {
+    margin-top: 10px;
+    font-weight: bold;
+}
